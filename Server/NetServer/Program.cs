@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace NetServer
 {
@@ -40,7 +41,6 @@ namespace NetServer
             }*/
 
             Server server = new Server();
-            server.StartDatabase("127.0.0.1", 3306, "netdatabase", "root", "");
             server.StartServer("0.0.0.0", 25565);
 
             while (true)
