@@ -31,7 +31,7 @@ namespace NetServer.Action
             DynamicBuffer buffer = new DynamicBuffer(0);
             buffer.WriteValue(message);
             DataPackage packet = new DataPackage(buffer, 100);
-            foreach (var session in SessionClientPool.Instance.GetOnlineSession())
+            foreach (var session in SessionClientPool.GetOnlineSession())
             {
                 session.Send(packet);
             }

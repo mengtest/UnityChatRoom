@@ -21,15 +21,12 @@ namespace NetServer
         /// </summary>
         public int maxSessionClient = 50;
 
-        //会话端池
-        private SessionClientPool pool = SessionClientPool.Instance;
-
         /// <summary>
         /// 启动服务器
         /// </summary>
         public void StartServer(string host, int port)
         {
-            pool.SetMaxSessionClient(maxSessionClient);
+            SessionClientPool.SetMaxSessionClient(maxSessionClient);
             listen = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             IPAddress ipAddress = IPAddress.Parse(host);
             IPEndPoint ipEndPoint = new IPEndPoint(ipAddress, port);
@@ -47,7 +44,7 @@ namespace NetServer
             try
             {
                 Socket socket = listen.EndAccept(ar);
-                SessionClient session = pool.GetSessionClient();
+                SessionClient session = SessionClientPool.GetSessionClient();
 
                 if (session == null)
                 {

@@ -165,6 +165,26 @@ namespace NetServer.Data
         }
 
         /// <summary>
+        /// 尝试读取Boolean类型数据
+        /// </summary>
+        public bool TryReadBoolean(ref bool value)
+        {
+            if (ReadableBytes() < sizeof(bool))
+                return false;
+            else
+                value = ReadBoolean();
+            return true;
+        }
+
+        /// <summary>
+        /// 读取Boolean类型数据
+        /// </summary>
+        public bool ReadBoolean()
+        {
+            return BitConverter.ToBoolean(Read(1), 0);
+        }
+
+        /// <summary>
         /// 尝试读取byte类型数据
         /// </summary>
         public bool TryReadByte(ref byte value)
@@ -363,7 +383,7 @@ namespace NetServer.Data
         /// <summary>
         /// 尝试读取一个对象数据
         /// </summary>
-        public bool TryObject<T>(ref T value) where T : class
+        public bool TryReadObject<T>(ref T value) where T : class
         {
             int objcetBytesLength = 0;
             if (TryReadInt(ref objcetBytesLength) && ReadableBytes() >= objcetBytesLength)
@@ -394,12 +414,23 @@ namespace NetServer.Data
             }
         }
 
+        /// <summary>
+        /// 写入一个对象数据
+        /// </summary>
         public DynamicBuffer WriteObject(object value)
         {
             string json = JsonConvert.SerializeObject(value);
             byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
             WriteValue(jsonBytes.Length);
             return WriteBytes(jsonBytes);
+        }
+
+        /// <summary>
+        /// 写入一个Boolean数据
+        /// </summary>
+        public DynamicBuffer WriteValue(bool value)
+        {
+            return WriteBytes(flip(BitConverter.GetBytes(value)));
         }
 
         /// <summary>

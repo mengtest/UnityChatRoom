@@ -10,47 +10,26 @@ namespace NetServer.Session
     public class SessionClientPool
     {
         // 会话池
-        private ConcurrentBag<SessionClient> sessions;
-
-        // 单例
-        private static SessionClientPool instance;
-
-        private SessionClientPool()
-        {
-
-        }
-
-        /// <summary>
-        /// 单例全局接口
-        /// </summary>
-        public static SessionClientPool Instance
-        {
-            get
-            {
-                if (instance == null)
-                    instance = new SessionClientPool();
-                return instance;
-            }
-        }
+        private static ConcurrentBag<SessionClient> Sessions = new ConcurrentBag<SessionClient>();
 
         /// <summary>
         /// 设置最大会话数量
         /// </summary>
-        public void SetMaxSessionClient(int count)
+        public static void SetMaxSessionClient(int count)
         {
-            sessions = new ConcurrentBag<SessionClient>();
+            Sessions = new ConcurrentBag<SessionClient>();
             for (int i = 0; i < count; i++)
             {
-                sessions.Add(new SessionClient());
+                Sessions.Add(new SessionClient());
             }
         }
 
         /// <summary>
         /// 获取空会话
         /// </summary>
-        public SessionClient GetSessionClient()
+        public static SessionClient GetSessionClient()
         {
-            foreach (var session in sessions)
+            foreach (var session in Sessions)
             {
                 if (!session.isUse)
                     return session;
@@ -58,7 +37,7 @@ namespace NetServer.Session
             return null;
         }
 
-        public IEnumerable<SessionClient> GetOnlineSession()
+        public static IEnumerable<SessionClient> GetOnlineSession()
         {
             List<SessionClient> sessions = new List<SessionClient>();
             foreach (var session in GetEnumerable())
@@ -72,9 +51,9 @@ namespace NetServer.Session
         /// <summary>
         /// 获取会话池迭代器
         /// </summary>
-        public IEnumerable<SessionClient> GetEnumerable()
+        public static IEnumerable<SessionClient> GetEnumerable()
         {
-            return sessions;
+            return Sessions;
         }
     }
 }

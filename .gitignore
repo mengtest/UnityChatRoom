@@ -217,3 +217,5 @@ pip-log.txt
 
 #Unity Library
 Library/
+
+Client/Temp/

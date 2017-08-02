@@ -8,6 +8,8 @@ using System.Reflection;
 /// </summary>
 public class ActionHandler : MonoBehaviour
 {
+    public const string ACTIONTYPE = "ActionType";
+
     /// <summary>
     /// 处理模块委托
     /// </summary>
@@ -72,7 +74,7 @@ public class ActionHandler : MonoBehaviour
     /// </summary>
     private void HandleInvoke(ActionParameter parameter)
     {
-        int handleType = parameter.GetValue<int>("ActionType");
+        int handleType = parameter.GetValue<int>(ACTIONTYPE);
         handles[handleType](parameter);
     }
 
@@ -120,7 +122,7 @@ public class ActionHandler : MonoBehaviour
         ActionBase action = actions[packet.PacketType];
         HandleModule handler = handles[action.ActionType];
         ActionParameter parameter = new ActionParameter();
-        parameter["ActionType"] = action.ActionType;
+        parameter[ACTIONTYPE] = action.ActionType;
         action.Packet = packet;
         if (action.ReceiveProcess(parameter) && handler != null)
             lock (invokeQueue) invokeQueue.Enqueue(parameter);

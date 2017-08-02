@@ -23,7 +23,7 @@ namespace NetServer.Action
         public override bool Process(ActionParameter parameter)
         {
             List<string> onlineList = new List<string>();
-            foreach (var session in SessionClientPool.Instance.GetOnlineSession())
+            foreach (var session in SessionClientPool.GetOnlineSession())
             {
                 onlineList.Add(session.GetRemoteAddress());
             }
